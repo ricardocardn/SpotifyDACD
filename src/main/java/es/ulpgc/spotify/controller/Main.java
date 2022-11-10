@@ -28,8 +28,6 @@ public class Main extends Thread {
         dataCollector = new DataCollector(new SpotifyAccessor());
         //dataCollector.collectData();
 
-        System.out.println(Main.dataBaseConnection.getArtistAlbums(Main.artistId.get("Mora")).toString());
-
         MainScreen ms = new MainScreen();
         ms.setVisible(true);
         ms.setResizable(false);
