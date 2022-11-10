@@ -1,4 +1,4 @@
-package es.ulpgc.spotify.downloader;
+package es.ulpgc.spotify.controller.downloader;
 
 import es.ulpgc.spotify.model.Album;
 import es.ulpgc.spotify.model.Artist;

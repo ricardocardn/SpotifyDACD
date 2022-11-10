@@ -42,6 +42,7 @@ public class MainScreen extends javax.swing.JFrame {
         jTextFieldNewArtist = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jTextFieldName = new JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -57,17 +58,18 @@ public class MainScreen extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 188, 74));
         jLabel2.setText("Spotify");
 
-        jComboBoxArtist.setModel(new javax.swing.DefaultComboBoxModel<>(Main.artistId.keySet().toArray(new String[0])));
+        jComboBoxArtist.setModel(new javax.swing.DefaultComboBoxModel<>());
+
+        for (Object artistName : Main.artistId.keySet()) {
+            jComboBoxArtist.addItem((String) artistName);
+        }
 
         jComboBoxDBMode.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "artists", "albums", "tracks" }));
 
         jButtonGet.setText("Get");
         jButtonGet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    jButtonGetActionPerformed(evt);
-                } catch (Exception ex) {}
-
+                jButtonGetActionPerformed(evt);
             }
         });
 
@@ -78,7 +80,7 @@ public class MainScreen extends javax.swing.JFrame {
         jLabel3.setText("Insert new artist");
 
         jTextFieldNewArtist.setText("Artist Id");
-        jTextFieldNewArtist.addActionListener(new java.awt.event.ActionListener() {
+        jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldNewArtistActionPerformed(evt);
             }
@@ -93,10 +95,13 @@ public class MainScreen extends javax.swing.JFrame {
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
+        jTextFieldName.setText("Artist Name");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane1)
                         .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(43, 43, 43)
                                 .addComponent(jLabel2)
@@ -107,15 +112,16 @@ public class MainScreen extends javax.swing.JFrame {
                                         .addComponent(jLabel3)
                                         .addComponent(jComboBoxArtist, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jTextFieldNewArtist)
-                                        .addComponent(jComboBoxDBMode, 0, 137, Short.MAX_VALUE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jTextFieldName, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(jTextFieldNewArtist)
+                                                .addComponent(jComboBoxDBMode, 0, 137, Short.MAX_VALUE)))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
                                         .addComponent(jButtonGet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(50, 50, 50))
-                        .addComponent(jScrollPane1)
         );
         jPanel1Layout.setVerticalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,8 +138,10 @@ public class MainScreen extends javax.swing.JFrame {
                                         .addComponent(jLabel3)
                                         .addComponent(jTextFieldNewArtist, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jButtonAdd))
-                                .addGap(47, 47, 47)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -149,9 +157,9 @@ public class MainScreen extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>
+    }
 
-    private void jButtonGetActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {
+    private void jButtonGetActionPerformed(java.awt.event.ActionEvent evt) {
         String sItem = (String) jComboBoxArtist.getSelectedItem();
         String sMode = (String) jComboBoxDBMode.getSelectedItem();
         if (!jComboBoxDBMode.getSelectedItem().equals("tracks"))
@@ -164,9 +172,10 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void jTextFieldNewArtistActionPerformed(java.awt.event.ActionEvent evt) {
         String id = this.jTextFieldNewArtist.getText();
-        Main.artistId.put(String.format("artistNew%s", Main.artistId.keySet().size()), id);
-        jComboBoxArtist.addItem(id);
-        this.dispose();
+        String name = this.jTextFieldName.getText();
+        jComboBoxArtist.addItem(name);
+        System.out.println(name);
+        Main.addArtist(name,id);
     }
 
     /**
@@ -219,6 +228,7 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
+    private JTextField jTextFieldName;
     private javax.swing.JTextField jTextFieldNewArtist;
     // End of variables declaration
 }
